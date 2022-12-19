@@ -1,8 +1,8 @@
-export interface ListSelection<T> {
+export interface ListSelection<T, S> {
   list: T[];
-  selected?: T;
+  selected?: S;
 }
 
-export function emptyListSelection<T>(v?: T[]): ListSelection<T> {
+export function emptyListSelection<T, S = T>(v?: T[]): ListSelection<T, S> {
   return { list: v ?? [] };
 }

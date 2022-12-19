@@ -8,12 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalcoloCIComponent } from './components/calcolo-ci/calcolo-ci.component';
 import { FoiExTabacchiComponent } from './components/foi-ex-tabacchi/foi-ex-tabacchi.component';
+import { LeftMenuComponent } from './components/left-menu/left-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FoiExTabacchiComponent,
-    CalcoloCIComponent
+    CalcoloCIComponent,
+    LeftMenuComponent
   ],
   imports: [
     BrowserModule,

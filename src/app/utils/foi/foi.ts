@@ -11,6 +11,11 @@ export interface FoiExTabacchi {
   value: number;
 }
 
+export interface CoefficienteInflazione{
+  date: Date;
+  value: string;
+}
+
 export const FOI_EX_TABACCHI: readonly FoiExTabacchi[] = [
   { year: 2020, month:  1, value: 102.7 },
   { year: 2020, month:  2, value: 102.5 },
@@ -59,7 +64,7 @@ export function foiExT(year: number, month: number): number | null {
 
 export function numeroIndice(date: Date): number | null {
   const foi3 = addMonths(date, FOI_PREV_3_MONTHS);
-  const foi2 = addMonths(date, -FOI_PREV_2_MONTHS);
+  const foi2 = addMonths(date, FOI_PREV_2_MONTHS);
   const day = getDate(date) - 1;
   const endDay = getDate(endOfMonth(date));
   const f3 = foiExTByDate(foi3);
@@ -74,12 +79,12 @@ export function numeroIndice(date: Date): number | null {
   return f3 + (f2 - f3) * day / endDay;
 }
 
-export function coefficienteInflazioneByDate(date1: Date, date2: Date): string | null {
-  const ni1 = numeroIndice(date1);
+export function coefficienteInflazioneByDate(date: Date, baseDate: Date): string | null {
+  const ni1 = numeroIndice(date);
   if (ni1 === null) {
     return null;
   }
-  const ni2 = numeroIndice(date2);
+  const ni2 = numeroIndice(baseDate);
   if (ni2 === null) {
     return null;
   }

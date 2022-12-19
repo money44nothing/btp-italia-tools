@@ -1,5 +1,5 @@
 <div
-  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">Lista CI</h1>
 </div>
 
@@ -21,7 +21,31 @@
   <div class="col-auto">
     <select class="form-select" [(ngModel)]="year.selected" (change)="onChange($event)">
       <option [ngValue]="undefined">Seleziona Anno</option>
-      <option *ngFor="let m of year.list; let i = index" [ngValue]="i">{{ m }}</option>
+      <option *ngFor="let m of year.list" [ngValue]="m">{{ m }}</option>
     </select>
+  </div>
+
+</div>
+
+<div class="row g-3 align-items-center">
+  <div class="col-auto">
+
+    <table class="table table-striped" *ngIf="ciList.length > 0">
+      <thead>
+      <tr>
+        <th scope="col">Data</th>
+        <th scope="col">Valore</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let i of ciList">
+        <th scope="row">
+          {{ i.date | date:'dd/MM/yyyy' }}
+        </th>
+        <td>{{ i.value }}</td>
+      </tr>
+      </tbody>
+    </table>
+
   </div>
 </div>

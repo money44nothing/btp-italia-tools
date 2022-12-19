@@ -29,6 +29,6 @@ export class BtpItaliaService {
 
   private toDate(itaStrDate: string): Date {
     const [day, month, year] = itaStrDate.split('/');
-    return new Date(+year, +month, +day);
+    return new Date(+year, +month - 1, +day);
   }
 }
