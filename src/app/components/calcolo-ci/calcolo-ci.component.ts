@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { endOfMonth, getDate } from 'date-fns';
+import { endOfMonth, getDate, getYear, isAfter } from 'date-fns';
+import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
+import { BtpItalia } from '../../services/btp-italia/BtpItalia';
 import { MONTH_NAMES } from '../../utils/dates';
 import { CoefficienteInflazione, coefficienteInflazioneByDate } from '../../utils/foi/foi';
 import { emptyListSelection } from '../../utils/selection/selection';
-import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
-import { BtpItalia } from '../../services/btp-italia/BtpItalia';
 
 @Component({
   selector: 'app-calcolo-ci',
@@ -12,7 +12,7 @@ import { BtpItalia } from '../../services/btp-italia/BtpItalia';
   styleUrls: ['./calcolo-ci.component.scss']
 })
 export class CalcoloCIComponent implements OnInit {
-  btp = emptyListSelection<BtpItalia>();
+  btp = emptyListSelection<BtpItalia, BtpItalia>();
   month = emptyListSelection<string, number>(MONTH_NAMES);
   year = emptyListSelection<number>();
   ciList: CoefficienteInflazione[] = [];
@@ -25,9 +25,14 @@ export class CalcoloCIComponent implements OnInit {
     this.btpItaliaService.list()
       .subscribe(list => {
         this.btp.list = list;
-        this.year.list = Array
-          .from(new Set(this.btp.list.map(b => b.dataInizioNegoziazione.getFullYear())).values())
-          .sort((l, r) => l < r ? -1 : l > r ? 1 : 0);
+
+        const arr: number[] = [];
+
+        const currYear = getYear(new Date()) + 1;
+        for (let i = getYear(this.btp.list[0].dataInizioNegoziazione); i <= currYear; i++) {
+          arr.push(i);
+        }
+        this.year.list = arr;
       });
   }
 
@@ -42,6 +47,9 @@ export class CalcoloCIComponent implements OnInit {
       const arr: CoefficienteInflazione[] = [];
       for (let i = 1; i <= getDate(endDay); i++) {
         const date = new Date(this.year.selected, this.month.selected, i);
+        if (isAfter(baseDate, date)) {
+          continue;
+        }
         const value = coefficienteInflazioneByDate(date, baseDate);
         if (value != null) {
           arr.push({ date, value });

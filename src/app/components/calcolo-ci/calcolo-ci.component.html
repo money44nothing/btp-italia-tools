@@ -7,7 +7,7 @@
   <div class="col-auto">
     <select class="form-select" [(ngModel)]="btp.selected" (change)="onChange($event)">
       <option [ngValue]="undefined">Seleziona BTP</option>
-      <option *ngFor="let b of btp.list" [ngValue]="b">{{ b.nome }}</option>
+      <option *ngFor="let b of btp.list" [ngValue]="b">{{ b.nome }} - {{ b.isin }} - CUM {{ b.isinCUM }}</option>
     </select>
   </div>
 
@@ -28,6 +28,11 @@
 </div>
 
 <div class="row g-3 align-items-center">
+  <ng-container *ngIf="btp.selected">
+    <p class="text-danger">{{ btp.selected?.dataInizioNegoziazione | date: 'dd/MM/yyyy' }} - {{ btp.selected?.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
+      {{ btp.selected?.cedolaAnnualizzata }}%)<br/>
+    Base {{ btp.selected?.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}</p>
+  </ng-container>
   <div class="col-auto">
 
     <table class="table table-striped" *ngIf="ciList.length > 0">
