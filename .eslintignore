@@ -1,0 +1,5 @@
+**/*.spec.ts
+polyfills.ts
+app.po.ts
+zone-flags.ts
+protractor.conf.js

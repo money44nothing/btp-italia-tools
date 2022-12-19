@@ -1,0 +1,27 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Lista CI</h1>
+</div>
+
+<div class="row g-3 align-items-center">
+  <div class="col-auto">
+    <select class="form-select" [(ngModel)]="btp.selected" (change)="onChange($event)">
+      <option [ngValue]="undefined">Seleziona BTP</option>
+      <option *ngFor="let b of btp.list" [ngValue]="b">{{ b.nome }}</option>
+    </select>
+  </div>
+
+  <div class="col-auto">
+    <select class="form-select" [(ngModel)]="month.selected" (change)="onChange($event)">
+      <option [ngValue]="undefined">Seleziona Mese</option>
+      <option *ngFor="let m of month.list; let i = index" [ngValue]="i">{{ m }}</option>
+    </select>
+  </div>
+
+  <div class="col-auto">
+    <select class="form-select" [(ngModel)]="year.selected" (change)="onChange($event)">
+      <option [ngValue]="undefined">Seleziona Anno</option>
+      <option *ngFor="let m of year.list; let i = index" [ngValue]="i">{{ m }}</option>
+    </select>
+  </div>
+</div>
