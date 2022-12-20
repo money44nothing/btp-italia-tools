@@ -1,21 +1,8 @@
 import { endOfMonth, getDate, getMonth, isAfter } from 'date-fns';
+import { CoefficienteInflazione, CoefficientiMensiliParam } from './coefficienteInflazioneTypes';
 import { numeroIndice } from './foi';
 
-const MAX_DIGIT_APPROX = 5;
-
-export interface CoefficienteInflazione {
-  date: Date;
-  value: string;
-}
-
-interface CoefficientiMensiliParam {
-  baseDate: Date;
-  firstDayOfTrading: Date;
-  year: number;
-  month: number;
-}
-
-export function coefficienteInflazioneByDate(date: Date, baseDate: Date): string | null {
+export function coefficienteInflazioneByDate(date: Date, baseDate: Date): number | null {
   const ni1 = numeroIndice(date);
   if (ni1 === null) {
     return null;
@@ -28,8 +15,8 @@ export function coefficienteInflazioneByDate(date: Date, baseDate: Date): string
   return coefficienteInflazioneByNumeroIndice(ni1, ni2);
 }
 
-export function coefficienteInflazioneByNumeroIndice(numeroIndice1: number, numeroIndice2: number): string | null {
-  return (numeroIndice1 / numeroIndice2).toFixed(MAX_DIGIT_APPROX);
+export function coefficienteInflazioneByNumeroIndice(numeroIndice1: number, numeroIndice2: number): number {
+  return numeroIndice1 / numeroIndice2;
 }
 
 export function getMesiCedola(date: Date): number[] {

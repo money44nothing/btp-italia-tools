@@ -1,14 +1,9 @@
 import { endOfMonth, getDate, getMonth, getYear } from 'date-fns';
 import addMonths from 'date-fns/addMonths';
+import { FoiExTabacchi } from './foiTypes';
 
 const FOI_PREV_3_MONTHS = -3;
 const FOI_PREV_2_MONTHS = -2;
-
-export interface FoiExTabacchi {
-  year: number;
-  month: number;
-  value: number;
-}
 
 export const FOI_EX_TABACCHI: readonly FoiExTabacchi[] = [
   { year: 2011, month: 1, value: 101.2 },
