@@ -1,7 +1,6 @@
 import { endOfMonth, getDate, getMonth, getYear } from 'date-fns';
 import addMonths from 'date-fns/addMonths';
 
-const MAX_DIGIT_APPROX = 5;
 const FOI_PREV_3_MONTHS = -3;
 const FOI_PREV_2_MONTHS = -2;
 
@@ -9,11 +8,6 @@ export interface FoiExTabacchi {
   year: number;
   month: number;
   value: number;
-}
-
-export interface CoefficienteInflazione{
-  date: Date;
-  value: string;
 }
 
 export const FOI_EX_TABACCHI: readonly FoiExTabacchi[] = [
@@ -186,21 +180,4 @@ export function numeroIndice(date: Date): number | null {
   }
 
   return f3 + (f2 - f3) * day / endDay;
-}
-
-export function coefficienteInflazioneByDate(date: Date, baseDate: Date): string | null {
-  const ni1 = numeroIndice(date);
-  if (ni1 === null) {
-    return null;
-  }
-  const ni2 = numeroIndice(baseDate);
-  if (ni2 === null) {
-    return null;
-  }
-
-  return coefficienteInflazioneByNumeroIndice(ni1, ni2);
-}
-
-export function coefficienteInflazioneByNumeroIndice(numeroIndice1: number, numeroIndice2: number): string | null {
-  return (numeroIndice1 / numeroIndice2).toFixed(MAX_DIGIT_APPROX);
 }
