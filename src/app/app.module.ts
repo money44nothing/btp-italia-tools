@@ -1,14 +1,17 @@
-import { JsonPipe } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { JsonPipe, registerLocaleData } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import localeIt from '@angular/common/locales/it';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { CalcoloCIComponent } from './components/calcolo-ci/calcolo-ci.component';
 import { FoiExTabacchiComponent } from './components/foi-ex-tabacchi/foi-ex-tabacchi.component';
 import { LeftMenuComponent } from './components/left-menu/left-menu.component';
+
+registerLocaleData(localeIt);
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { LeftMenuComponent } from './components/left-menu/left-menu.component';
     NgbModule,
     NgbTypeaheadModule, FormsModule, JsonPipe, AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'it-IT' },
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
