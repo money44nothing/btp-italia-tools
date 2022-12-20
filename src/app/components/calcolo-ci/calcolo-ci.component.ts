@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { endOfMonth, getDate, getYear, isAfter } from 'date-fns';
+import { getYear } from 'date-fns';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
 import { MONTH_NAMES } from '../../utils/dates';
-import { CoefficienteInflazione, coefficienteInflazioneByDate } from '../../utils/foi/foi';
+import { CoefficienteInflazione, getCoefficientiMensili, getDataUltimaCedola } from '../../utils/foi/coefficienti';
 import { emptyListSelection } from '../../utils/selection/selection';
 
 @Component({
@@ -16,6 +16,7 @@ export class CalcoloCIComponent implements OnInit {
   month = emptyListSelection<string, number>(MONTH_NAMES);
   year = emptyListSelection<number>();
   ciList: CoefficienteInflazione[] = [];
+  baseDate?: Date;
 
   constructor(
     private btpItaliaService: BtpItaliaService,
@@ -36,26 +37,20 @@ export class CalcoloCIComponent implements OnInit {
       });
   }
 
-  onChange($event: Event): void {
+  onChange(_$event: Event): void {
     this.showCIList();
   }
 
   private showCIList(): void {
     if (this.btp.selected != null && this.month.selected != null && this.year.selected != null) {
-      const endDay = endOfMonth(new Date(this.year.selected, this.month.selected, 1));
-      const baseDate = this.btp.selected.dataInizioNegoziazione;
-      const arr: CoefficienteInflazione[] = [];
-      for (let i = 1; i <= getDate(endDay); i++) {
-        const date = new Date(this.year.selected, this.month.selected, i);
-        if (isAfter(baseDate, date)) {
-          continue;
-        }
-        const value = coefficienteInflazioneByDate(date, baseDate);
-        if (value != null) {
-          arr.push({ date, value });
-        }
-      }
-      this.ciList = arr;
+      this.baseDate = getDataUltimaCedola(this.btp.selected.dataInizioNegoziazione, this.year.selected, this.month.selected);
+      this.ciList = getCoefficientiMensili(
+        {
+          baseDate: this.baseDate,
+          firstDayOfTrading: this.btp.selected.dataInizioNegoziazione,
+          year: this.year.selected,
+          month: this.month.selected
+        });
     }
   }
 }

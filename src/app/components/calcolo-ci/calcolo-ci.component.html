@@ -29,9 +29,13 @@
 
 <div class="row g-3 align-items-center">
   <ng-container *ngIf="btp.selected">
-    <p class="text-danger">{{ btp.selected?.dataInizioNegoziazione | date: 'dd/MM/yyyy' }} - {{ btp.selected?.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
-      {{ btp.selected?.cedolaAnnualizzata }}%)<br/>
-    Base {{ btp.selected?.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}</p>
+    <p class="text-danger">{{ btp.selected.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
+      - {{ btp.selected.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
+      {{ btp.selected.cedolaAnnualizzata }}%)<br/>
+      <ng-container *ngIf="baseDate">
+        Base {{ baseDate | date: 'dd/MM/yyyy' }}
+      </ng-container>
+    </p>
   </ng-container>
   <div class="col-auto">
 
@@ -47,7 +51,7 @@
         <th scope="row">
           {{ i.date | date:'dd/MM/yyyy' }}
         </th>
-        <td>{{ i.value }}</td>
+        <td>{{ i.value | number:'0.5' }}</td>
       </tr>
       </tbody>
     </table>
