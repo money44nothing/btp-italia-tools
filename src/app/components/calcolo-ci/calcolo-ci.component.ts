@@ -1,5 +1,6 @@
 import { formatNumber } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { getYear } from 'date-fns';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
@@ -22,6 +23,8 @@ export class CalcoloCIComponent implements OnInit {
   baseDate?: Date;
 
   constructor(
+    public router: Router,
+    private activatedRoute: ActivatedRoute,
     private btpItaliaService: BtpItaliaService,
     private exportService: ExportFOIService,
   ) {}
@@ -30,15 +33,20 @@ export class CalcoloCIComponent implements OnInit {
     this.btpItaliaService.list()
       .subscribe(list => {
         this.btp.list = list;
-
-        const arr: number[] = [];
-
-        const currYear = getYear(new Date()) + 1;
-        for (let i = getYear(this.btp.list[0].dataInizioNegoziazione); i <= currYear; i++) {
-          arr.push(i);
-        }
-        this.year.list = arr;
+        this.year.list = this.yearsFromDataInizioNegoziazione();
+        const params = this.activatedRoute.snapshot.queryParamMap;
+        this.setup(params.get('isin'), Number(params.get('year')), Number(params.get('month')));
       });
+  }
+
+  private yearsFromDataInizioNegoziazione(): number[] {
+    const arr: number[] = [];
+
+    const currYear = getYear(new Date()) + 1;
+    for (let i = getYear(this.btp.list[0].dataInizioNegoziazione); i <= currYear; i++) {
+      arr.push(i);
+    }
+    return arr;
   }
 
   onChange(_$event: Event): void {
@@ -46,6 +54,7 @@ export class CalcoloCIComponent implements OnInit {
   }
 
   private showCIList(): void {
+    this.ciList = [];
     if (this.btp.selected != null && this.month.selected != null && this.year.selected != null) {
       this.baseDate = getDataUltimaCedola(this.btp.selected.dataInizioNegoziazione, this.year.selected, this.month.selected);
       this.ciList = getCoefficientiMensili(
@@ -69,4 +78,16 @@ export class CalcoloCIComponent implements OnInit {
     }
   }
 
+  private setup(isin: string | null, year: number, month: number): void {
+    const selBtp = this.btp.list.find(v => v.isin === isin);
+    const selYear = this.year.list.find(v => v === year);
+    const selMonth = 1 <= month && month <= 12 ? month : undefined;
+
+    if (selBtp != null && selYear != null && selMonth != null) {
+      this.btp.selected = selBtp;
+      this.year.selected = selYear;
+      this.month.selected = selMonth - 1;
+      this.showCIList();
+    }
+  }
 }

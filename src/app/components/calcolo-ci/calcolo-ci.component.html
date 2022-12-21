@@ -3,7 +3,7 @@
   <h1 class="h2">Lista CI</h1>
 </div>
 
-<div class="row g-3 align-items-center">
+<div class="row g-3 align-items-center mb-3">
   <div class="col-auto">
     <select class="form-select" [(ngModel)]="btp.selected" (change)="onChange($event)">
       <option [ngValue]="undefined">Seleziona BTP</option>
@@ -27,16 +27,33 @@
 
 </div>
 
-<div class="row g-3 align-items-center">
-  <ng-container *ngIf="btp.selected">
-    <p class="text-danger">{{ btp.selected.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
-      - {{ btp.selected.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
-      {{ btp.selected.cedolaAnnualizzata }}%)<br/>
-      <ng-container *ngIf="baseDate">
-        Base {{ baseDate | date: 'dd/MM/yyyy' }}
-      </ng-container>
-    </p>
-  </ng-container>
+<ngb-accordion activeIds="" *ngIf="btp.selected">
+  <ngb-panel title="Info">
+    <ng-template ngbPanelContent>
+      <p class="mb-1">
+        <a target="_blank"
+           href="https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/{{btp.selected.isin}}.html?lang=it">Scheda
+          Borsa Italiana</a>
+      </p>
+      <p class="mb-1">
+        <a
+            *ngIf="month.selected && year.selected"
+            target="_blank"
+            [routerLink]="[router.url]"
+            [queryParams]="{isin: btp.selected.isin, year: year.selected, month: month.selected + 1}">Permanent link</a>
+      </p>
+      <p class="text-danger">{{ btp.selected.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
+        - {{ btp.selected.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
+        {{ btp.selected.cedolaAnnualizzata }}%)<br/>
+        <ng-container *ngIf="baseDate">
+          Base {{ baseDate | date: 'dd/MM/yyyy' }}
+        </ng-container>
+      </p>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+<div class="row g-3 align-items-center mt-2">
   <div class="col-auto">
 
     <ng-container *ngIf="ciList.length > 0">

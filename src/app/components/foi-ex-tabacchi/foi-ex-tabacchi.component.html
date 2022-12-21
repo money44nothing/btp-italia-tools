@@ -3,11 +3,22 @@
   <h1 class="h2">Lista FOI Ex Tabacchi</h1>
 </div>
 
-<div class="row g-3 align-items-center">
+<div class="row g-3 align-items-center mb-2">
   <div class="col-auto">
     <select class="form-select" aria-label="Default select example" [(ngModel)]="currentYear">
       <option *ngFor="let y of years" [selected]="isCurrentYear(y)" [ngValue]="y">{{ y }}</option>
     </select>
+  </div>
+</div>
+
+<div class="row g-3 align-items-center mb-2">
+  <div class="col-auto">
+    <p class="mb-1">
+      <a
+          target="_blank"
+          [routerLink]="[router.url]"
+          [queryParams]="{year: currentYear}">Permanent link</a>
+    </p>
   </div>
 </div>
 
