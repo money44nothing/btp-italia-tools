@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { getYear } from 'date-fns';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
+import { ExportFOIService } from '../../services/foi/export-foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
 import { CoefficienteInflazione } from '../../utils/foi/coefficienteInflazioneTypes';
 import { getCoefficientiMensili, getDataUltimaCedola } from '../../utils/foi/coefficienti';
-import { exportCoefficienti } from '../../utils/foi/export';
 import { emptyListSelection } from '../../utils/selection/selection';
 
 @Component({
@@ -23,6 +23,7 @@ export class CalcoloCIComponent implements OnInit {
 
   constructor(
     private btpItaliaService: BtpItaliaService,
+    private exportService: ExportFOIService,
   ) {}
 
   ngOnInit(): void {
@@ -60,8 +61,11 @@ export class CalcoloCIComponent implements OnInit {
   export(): void {
     if (this.btp.selected != null && this.month.selected != null && this.year.selected != null && this.ciList.length > 0) {
       const strMonth = formatNumber(this.month.selected + 1, 'it', '2.0');
-      const fileName = `CI-${this.btp.selected.isin}-${this.year.selected}-${strMonth}`;
-      exportCoefficienti(this.ciList, fileName);
+      this.exportService.exportCoefficienti({
+        list: this.ciList,
+        sheetTitle: `CI ${this.btp.selected.isin} ${this.year.selected}-${strMonth}`,
+        fileName: `CI-${this.btp.selected.isin}-${this.year.selected}-${strMonth}`
+      });
     }
   }
 

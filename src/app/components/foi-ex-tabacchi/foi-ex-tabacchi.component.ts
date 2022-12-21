@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { ExportFOIService } from '../../services/foi/export-foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
-import { exportFoi } from '../../utils/foi/export';
 import { FOI_EX_TABACCHI } from '../../utils/foi/foi';
 import { FoiExTabacchi } from '../../utils/foi/foiTypes';
 
@@ -20,15 +20,19 @@ export class FoiExTabacchiComponent {
   foiList: FoiDesc[] = [];
   years = new Set(FOI_EX_TABACCHI.map(foi => foi.year));
   private mCurrentYear = 0;
+
   get currentYear(): number {
     return this.mCurrentYear;
   }
+
   set currentYear(v: number) {
     this.mCurrentYear = v;
     this.foiList = this.foi.filter(foi => foi.year === this.mCurrentYear);
   }
 
-  constructor() {
+  constructor(
+    private exportService: ExportFOIService
+  ) {
     this.currentYear = new Date().getFullYear();
   }
 
@@ -37,7 +41,10 @@ export class FoiExTabacchiComponent {
   }
 
   export(): void {
-    const fileName = `FOI-${this.currentYear}`;
-    exportFoi(this.foiList, fileName);
+    this.exportService.exportFoi({
+      list: this.foiList,
+      fileName: `FOI-Ex-T-${this.currentYear}`,
+      sheetTitle: `FOI Ex Tabacchi ${this.currentYear}`
+    });
   }
 }
