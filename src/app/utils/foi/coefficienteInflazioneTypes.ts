@@ -3,6 +3,7 @@ export interface CoefficienteInflazione {
   date: Date;
   value: number;
   baseDate: Date;
+  numeroIndice: number;
 }
 
 export interface CoefficientiMensiliParam {

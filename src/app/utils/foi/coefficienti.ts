@@ -1,13 +1,13 @@
-import { endOfMonth, getDate, getMonth, isAfter } from 'date-fns';
+import { endOfMonth, getDate, getMonth, getYear, isAfter } from 'date-fns';
 import { CoefficienteInflazione, CoefficientiMensiliParam } from './coefficienteInflazioneTypes';
-import { numeroIndice } from './foi';
+import { numeroIndiceByDate } from './foi';
 
 export function coefficienteInflazioneByDate(date: Date, baseDate: Date): number | null {
-  const ni1 = numeroIndice(date);
+  const ni1 = numeroIndiceByDate(date);
   if (ni1 === null) {
     return null;
   }
-  const ni2 = numeroIndice(baseDate);
+  const ni2 = numeroIndiceByDate(baseDate);
   if (ni2 === null) {
     return null;
   }
@@ -40,6 +40,8 @@ export function getDataUltimaCedola(date: Date, year: number, month: number): Da
     cedolaMonth = m2;
   } else if (month > m1) {
     cedolaMonth = m1;
+  } else if (month === m1 && year === getYear(date)) {
+    cedolaMonth = m1;
   } else {
     cedolaMonth = m2;
     year = year - 1;
@@ -65,18 +67,25 @@ function fillMese(
   const isCedolaMonth = getMesiCedola(param.firstDayOfTrading).includes(param.month);
   const firstDayOfTrading = getDate(param.firstDayOfTrading);
   let baseDate = param.baseDate;
+  let numeroIndice = numeroIndiceByDate(baseDate);
+
+  if (numeroIndice == null) {
+    return ciMensili;
+  }
 
   for (let day = 1; day <= endDay; day++) {
     const date = new Date(param.year, param.month, day);
     if (isAfter(param.firstDayOfTrading, date)) {
       continue;
     }
-    const value = coefficienteInflazioneByDate(date, baseDate);
-    if (value != null) {
-      ciMensili.push({ date, value, baseDate });
+    const niDate = numeroIndiceByDate(date);
+    if (niDate != null && numeroIndice != null) {
+      const value = coefficienteInflazioneByNumeroIndice(niDate, numeroIndice);
+      ciMensili.push({ date, value, baseDate, numeroIndice });
     }
     if (isCedolaMonth && day === firstDayOfTrading) {
       baseDate = date;
+      numeroIndice = numeroIndiceByDate(baseDate);
     }
   }
   return ciMensili;

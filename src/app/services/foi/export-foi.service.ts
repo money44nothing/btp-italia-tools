@@ -17,11 +17,18 @@ export class ExportFOIService {
     const wb = new Excel.Workbook();
     const ws = wb.addWorksheet(sheetTitle ?? '');
     ws.columns = [
-      { header: 'Data', key: 'dt', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
-      { header: 'CI', key: 'ci', width: 15 },
+      { header: 'Data', key: 'date', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
+      { header: 'CI', key: 'value', width: 15 },
+      { header: 'Base Data', key: 'baseData', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
+      { header: 'Numero Indice', key: 'numeroIndice', width: 15 },
     ];
 
-    const values = list.map(r => [toUTC(r.date), +r.value.toFixed(MAX_DIGIT_APPROX)]);
+    const values = list.map(r => ({
+      date: toUTC(r.date),
+      baseData: toUTC(r.baseDate),
+      value: +r.value.toFixed(MAX_DIGIT_APPROX),
+      numeroIndice: +r.numeroIndice.toFixed(MAX_DIGIT_APPROX),
+    }));
     ws.addRows(values);
     this.saveFile(wb, fileName).then();
   }

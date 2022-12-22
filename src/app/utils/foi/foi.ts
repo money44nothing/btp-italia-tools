@@ -160,7 +160,7 @@ export function foiExT(year: number, month: number): number | null {
   return v ? v.value : null;
 }
 
-export function numeroIndice(date: Date): number | null {
+export function numeroIndiceByDate(date: Date): number | null {
   const foi3 = addMonths(date, FOI_PREV_3_MONTHS);
   const foi2 = addMonths(date, FOI_PREV_2_MONTHS);
   const day = getDate(date) - 1;
