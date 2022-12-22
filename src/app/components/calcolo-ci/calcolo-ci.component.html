@@ -39,10 +39,10 @@
         <a
             *ngIf="month.selected && year.selected"
             target="_blank"
-            [routerLink]="[router.url]"
+            [routerLink]="[permalinkPath]"
             [queryParams]="{isin: btp.selected.isin, year: year.selected, month: month.selected + 1}">Permanent link</a>
       </p>
-      <p class="text-danger">{{ btp.selected.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
+      <p class="text-success">{{ btp.selected.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
         - {{ btp.selected.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
         {{ btp.selected.cedolaAnnualizzata }}%)<br/>
         <ng-container *ngIf="baseDate">
@@ -66,14 +66,14 @@
         <tr>
           <th scope="col">Data</th>
           <th scope="col">Valore</th>
+          <th scope="col">Base Data</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let i of ciList">
-          <th scope="row">
-            {{ i.date | date:'dd/MM/yyyy' }}
-          </th>
-          <td>{{ i.value | number:'0.5' }}</td>
+        <tr *ngFor="let ci of ciList; let i = index">
+          <th scope="row">{{ ci.date | date:'dd/MM/yyyy' }}</th>
+          <td>{{ ci.value | number:'0.5' }}</td>
+          <td [ngClass]="baseDateClass(i)">{{ ci.baseDate | date:'dd/MM/yyyy' }}</td>
         </tr>
         </tbody>
       </table>

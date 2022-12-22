@@ -1,13 +1,13 @@
 import { formatNumber } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { getYear } from 'date-fns';
+import { ActivatedRoute } from '@angular/router';
+import { compareAsc, getYear } from 'date-fns';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
 import { ExportFOIService } from '../../services/foi/export-foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
 import { CoefficienteInflazione } from '../../utils/foi/coefficienteInflazioneTypes';
-import { getCoefficientiMensili, getDataUltimaCedola } from '../../utils/foi/coefficienti';
+import { getCoefficienteMensile, getDataUltimaCedola } from '../../utils/foi/coefficienti';
 import { emptyListSelection } from '../../utils/selection/selection';
 
 @Component({
@@ -21,15 +21,17 @@ export class CalcoloCIComponent implements OnInit {
   year = emptyListSelection<number>();
   ciList: CoefficienteInflazione[] = [];
   baseDate?: Date;
+  permalinkPath = '';
 
   constructor(
-    public router: Router,
     private activatedRoute: ActivatedRoute,
     private btpItaliaService: BtpItaliaService,
     private exportService: ExportFOIService,
   ) {}
 
   ngOnInit(): void {
+    this.permalinkPath = location.pathname;
+
     this.btpItaliaService.list()
       .subscribe(list => {
         this.btp.list = list;
@@ -57,7 +59,7 @@ export class CalcoloCIComponent implements OnInit {
     this.ciList = [];
     if (this.btp.selected != null && this.month.selected != null && this.year.selected != null) {
       this.baseDate = getDataUltimaCedola(this.btp.selected.dataInizioNegoziazione, this.year.selected, this.month.selected);
-      this.ciList = getCoefficientiMensili(
+      this.ciList = getCoefficienteMensile(
         {
           baseDate: this.baseDate,
           firstDayOfTrading: this.btp.selected.dataInizioNegoziazione,
@@ -89,5 +91,12 @@ export class CalcoloCIComponent implements OnInit {
       this.month.selected = selMonth - 1;
       this.showCIList();
     }
+  }
+
+  baseDateClass(index: number): Record<string, boolean> {
+    const isBaseChanged = index > 0 ? compareAsc(this.ciList[index].baseDate, this.ciList[index - 1].baseDate) !== 0 : false;
+    return {
+      'text-danger': isBaseChanged
+    };
   }
 }

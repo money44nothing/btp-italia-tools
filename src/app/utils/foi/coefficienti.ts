@@ -47,23 +47,38 @@ export function getDataUltimaCedola(date: Date, year: number, month: number): Da
   return new Date(year, cedolaMonth, getDate(date));
 }
 
-export function getCoefficientiMensili(param: CoefficientiMensiliParam): CoefficienteInflazione[] {
-  const arr: CoefficienteInflazione[] = [];
-  const endDay = endOfMonth(new Date(param.year, param.month, 1));
+export function getCoefficienteMensile(param: Readonly<CoefficientiMensiliParam>): CoefficienteInflazione[] {
+  const lastDayOfMonth = endOfMonth(new Date(param.year, param.month, 1));
 
-  if (isAfter(param.firstDayOfTrading, endDay)) {
-    return arr;
+  if (isAfter(param.firstDayOfTrading, lastDayOfMonth)) {
+    return [];
   }
 
-  for (let i = 1; i <= getDate(endDay); i++) {
-    const date = new Date(param.year, param.month, i);
+  return fillMese(param, getDate(lastDayOfMonth));
+}
+
+function fillMese(
+  param: Readonly<CoefficientiMensiliParam>,
+  endDay: number,
+): CoefficienteInflazione[] {
+  const ciMensili: CoefficienteInflazione[] = [];
+  const isCedolaMonth = getMesiCedola(param.firstDayOfTrading).includes(param.month);
+  const firstDayOfTrading = getDate(param.firstDayOfTrading);
+  let baseDate = param.baseDate;
+
+  for (let day = 1; day <= endDay; day++) {
+    const date = new Date(param.year, param.month, day);
     if (isAfter(param.firstDayOfTrading, date)) {
       continue;
     }
-    const value = coefficienteInflazioneByDate(date, param.baseDate);
+    const value = coefficienteInflazioneByDate(date, baseDate);
     if (value != null) {
-      arr.push({ date, value });
+      ciMensili.push({ date, value, baseDate });
+    }
+    if (isCedolaMonth && day === firstDayOfTrading) {
+      baseDate = date;
     }
   }
-  return arr;
+  return ciMensili;
 }
+
