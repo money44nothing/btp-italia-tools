@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ExportFOIService } from '../../services/foi/export-foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
 import { FOI_EX_TABACCHI } from '../../utils/foi/foi';
@@ -31,11 +31,13 @@ export class FoiExTabacchiComponent {
     this.foiList = this.foi.filter(foi => foi.year === this.mCurrentYear);
   }
 
+  permalinkPath = '';
+
   constructor(
-    public router: Router,
     private activatedRoute: ActivatedRoute,
     private exportService: ExportFOIService
   ) {
+    this.permalinkPath = location.pathname;
     const year = Number(activatedRoute.snapshot.queryParamMap.get('year'));
     this.currentYear = this.years.has(year) ? year : new Date().getFullYear();
   }
