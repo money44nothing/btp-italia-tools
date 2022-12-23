@@ -78,14 +78,14 @@ function fillMese(
     if (isAfter(param.firstDayOfTrading, coefficienteDate)) {
       continue;
     }
+    if (isCedolaMonth && day === firstDayOfTrading) {
+      baseDate = coefficienteDate;
+      numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
+    }
     const numeroIndiceCoefficienteDate = numeroIndiceByDate(coefficienteDate);
     if (numeroIndiceCoefficienteDate != null && numeroIndiceBaseDate != null) {
       const coefficiente = coefficienteInflazioneByNumeroIndice(numeroIndiceCoefficienteDate, numeroIndiceBaseDate);
       ciMensili.push({ coefficienteDate, coefficiente, baseDate, numeroIndiceBaseDate, numeroIndiceCoefficienteDate });
-    }
-    if (isCedolaMonth && day === firstDayOfTrading) {
-      baseDate = coefficienteDate;
-      numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
     }
   }
   return ciMensili;

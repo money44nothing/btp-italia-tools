@@ -20,6 +20,7 @@ export class CalcoloCIComponent implements OnInit {
   month = emptyListSelection<string, number>(MONTH_NAMES);
   year = emptyListSelection<number>();
   ciList: CoefficienteInflazione[] = [];
+  indexBaseDateChange = -1;
   baseDate?: Date;
   permalinkPath = '';
 
@@ -66,6 +67,7 @@ export class CalcoloCIComponent implements OnInit {
           year: this.year.selected,
           month: this.month.selected
         });
+      this.indexBaseDateChange = this.ciList.findIndex((el, i, arr) => i > 0 ? compareAsc(el.baseDate, arr[i - 1].baseDate) !== 0 : false);
     }
   }
 
@@ -81,7 +83,7 @@ export class CalcoloCIComponent implements OnInit {
   }
 
   private setup(isin: string | null, year: number, month: number): void {
-    const selBtp = this.btp.list.find(v => v.isin === isin);
+    const selBtp = this.btp.list.find(v => v.isin === isin || v.isinCUM === isin);
     const selYear = this.year.list.find(v => v === year);
     const selMonth = 1 <= month && month <= 12 ? month : undefined;
 
@@ -94,9 +96,17 @@ export class CalcoloCIComponent implements OnInit {
   }
 
   baseDateClass(index: number): Record<string, boolean> {
-    const isBaseChanged = index > 0 ? compareAsc(this.ciList[index].baseDate, this.ciList[index - 1].baseDate) !== 0 : false;
+    const isBaseChanged = index === this.indexBaseDateChange;
     return {
-      'text-danger': isBaseChanged
+      'text-danger': isBaseChanged,
+      'base-changed': isBaseChanged,
+    };
+  }
+
+  baseDateNoteStyle(): Record<string, string> {
+    const isBaseChanged = this.indexBaseDateChange >= 0;
+    return {
+      visibility: isBaseChanged ? 'visible' : 'collapse',
     };
   }
 }

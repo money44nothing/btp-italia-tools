@@ -1,4 +1,5 @@
 export const MAX_DIGIT_APPROX = 5;
+
 export interface CoefficienteInflazione {
   coefficienteDate: Date;
   coefficiente: number;

@@ -1,6 +1,6 @@
 <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">Lista CI</h1>
+  <h1 class="h2">Lista Coefficienti Inflazione</h1>
 </div>
 
 <div class="row g-3 align-items-center mb-3">
@@ -80,6 +80,11 @@
           <td>{{ ci.numeroIndiceBaseDate | number:'0.5' }}</td>
         </tr>
         </tbody>
+        <tfoot>
+        <td colspan="5" class="text-danger">
+          <span [ngStyle]="baseDateNoteStyle()">(*) Cambio Data di Base</span>
+        </td>
+        </tfoot>
       </table>
 
     </ng-container>
