@@ -1,9 +1,10 @@
 export const MAX_DIGIT_APPROX = 5;
 export interface CoefficienteInflazione {
-  date: Date;
-  value: number;
+  coefficienteDate: Date;
+  coefficiente: number;
   baseDate: Date;
-  numeroIndice: number;
+  numeroIndiceCoefficienteDate: number;
+  numeroIndiceBaseDate: number;
 }
 
 export interface CoefficientiMensiliParam {

@@ -67,25 +67,25 @@ function fillMese(
   const isCedolaMonth = getMesiCedola(param.firstDayOfTrading).includes(param.month);
   const firstDayOfTrading = getDate(param.firstDayOfTrading);
   let baseDate = param.baseDate;
-  let numeroIndice = numeroIndiceByDate(baseDate);
+  let numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
 
-  if (numeroIndice == null) {
+  if (numeroIndiceBaseDate == null) {
     return ciMensili;
   }
 
   for (let day = 1; day <= endDay; day++) {
-    const date = new Date(param.year, param.month, day);
-    if (isAfter(param.firstDayOfTrading, date)) {
+    const coefficienteDate = new Date(param.year, param.month, day);
+    if (isAfter(param.firstDayOfTrading, coefficienteDate)) {
       continue;
     }
-    const niDate = numeroIndiceByDate(date);
-    if (niDate != null && numeroIndice != null) {
-      const value = coefficienteInflazioneByNumeroIndice(niDate, numeroIndice);
-      ciMensili.push({ date, value, baseDate, numeroIndice });
+    const numeroIndiceCoefficienteDate = numeroIndiceByDate(coefficienteDate);
+    if (numeroIndiceCoefficienteDate != null && numeroIndiceBaseDate != null) {
+      const coefficiente = coefficienteInflazioneByNumeroIndice(numeroIndiceCoefficienteDate, numeroIndiceBaseDate);
+      ciMensili.push({ coefficienteDate, coefficiente, baseDate, numeroIndiceBaseDate, numeroIndiceCoefficienteDate });
     }
     if (isCedolaMonth && day === firstDayOfTrading) {
-      baseDate = date;
-      numeroIndice = numeroIndiceByDate(baseDate);
+      baseDate = coefficienteDate;
+      numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
     }
   }
   return ciMensili;

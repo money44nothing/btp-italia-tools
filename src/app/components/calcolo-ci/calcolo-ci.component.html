@@ -68,14 +68,16 @@
           <th scope="col">Valore</th>
           <th scope="col">Base Data</th>
           <th scope="col">Numero Indice</th>
+          <th scope="col">Numero Indice Base Data</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let ci of ciList; let i = index">
-          <th scope="row">{{ ci.date | date:'dd/MM/yyyy' }}</th>
-          <td>{{ ci.value | number:'0.5' }}</td>
+          <th scope="row">{{ ci.coefficienteDate | date:'dd/MM/yyyy' }}</th>
+          <td>{{ ci.coefficiente | number:'0.5' }}</td>
           <td [ngClass]="baseDateClass(i)">{{ ci.baseDate | date:'dd/MM/yyyy' }}</td>
-          <td>{{ ci.numeroIndice | number:'0.5' }}</td>
+          <td>{{ ci.numeroIndiceCoefficienteDate | number:'0.5' }}</td>
+          <td>{{ ci.numeroIndiceBaseDate | number:'0.5' }}</td>
         </tr>
         </tbody>
       </table>

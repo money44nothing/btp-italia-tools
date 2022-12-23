@@ -17,17 +17,19 @@ export class ExportFOIService {
     const wb = new Excel.Workbook();
     const ws = wb.addWorksheet(sheetTitle ?? '');
     ws.columns = [
-      { header: 'Data', key: 'date', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
-      { header: 'CI', key: 'value', width: 15 },
-      { header: 'Base Data', key: 'baseData', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
-      { header: 'Numero Indice', key: 'numeroIndice', width: 15 },
+      { header: 'Data', key: 'coefficienteDate', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
+      { header: 'CI', key: 'coefficiente', width: 15 },
+      { header: 'Base Data', key: 'baseDate', width: 15, style: { numFmt: 'dd/mm/yyyy' } },
+      { header: 'Numero Indice', key: 'numeroIndiceCoefficienteDate', width: 15 },
+      { header: 'Numero Indice Base Data', key: 'numeroIndiceBaseDate', width: 15 },
     ];
 
     const values = list.map(r => ({
-      date: toUTC(r.date),
-      baseData: toUTC(r.baseDate),
-      value: +r.value.toFixed(MAX_DIGIT_APPROX),
-      numeroIndice: +r.numeroIndice.toFixed(MAX_DIGIT_APPROX),
+      coefficienteDate: toUTC(r.coefficienteDate),
+      baseDate: toUTC(r.baseDate),
+      coefficiente: +r.coefficiente.toFixed(MAX_DIGIT_APPROX),
+      numeroIndiceCoefficienteDate: +r.numeroIndiceCoefficienteDate.toFixed(MAX_DIGIT_APPROX),
+      numeroIndiceBaseDate: +r.numeroIndiceBaseDate.toFixed(MAX_DIGIT_APPROX),
     }));
     ws.addRows(values);
     this.saveFile(wb, fileName).then();
