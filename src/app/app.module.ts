@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { CalcoloCIComponent } from './components/calcolo-ci/calcolo-ci.component';
 import { FoiExTabacchiComponent } from './components/foi-ex-tabacchi/foi-ex-tabacchi.component';
 import { LeftMenuComponent } from './components/left-menu/left-menu.component';
+import { HomeComponent } from './components/home/home.component';
 
 registerLocaleData(localeIt);
 
@@ -18,7 +19,8 @@ registerLocaleData(localeIt);
     AppComponent,
     FoiExTabacchiComponent,
     CalcoloCIComponent,
-    LeftMenuComponent
+    LeftMenuComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
