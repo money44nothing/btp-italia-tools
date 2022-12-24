@@ -11,11 +11,11 @@ import { getCoefficienteMensile, getDataUltimaCedola } from '../../utils/foi/coe
 import { emptyListSelection } from '../../utils/selection/selection';
 
 @Component({
-  selector: 'app-calcolo-ci',
-  templateUrl: './calcolo-ci.component.html',
-  styleUrls: ['./calcolo-ci.component.scss']
+  selector: 'app-list-ci',
+  templateUrl: './list-ci.component.html',
+  styleUrls: ['./list-ci.component.scss']
 })
-export class CalcoloCIComponent implements OnInit {
+export class ListCiComponent implements OnInit {
   btp = emptyListSelection<BtpItalia, BtpItalia>();
   month = emptyListSelection<string, number>(MONTH_NAMES);
   year = emptyListSelection<number>();

@@ -7,7 +7,7 @@ import localeIt from '@angular/common/locales/it';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { CalcoloCIComponent } from './components/calcolo-ci/calcolo-ci.component';
+import { ListCiComponent } from './components/list-ci/list-ci.component';
 import { FoiExTabacchiComponent } from './components/foi-ex-tabacchi/foi-ex-tabacchi.component';
 import { LeftMenuComponent } from './components/left-menu/left-menu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -18,7 +18,7 @@ registerLocaleData(localeIt);
   declarations: [
     AppComponent,
     FoiExTabacchiComponent,
-    CalcoloCIComponent,
+    ListCiComponent,
     LeftMenuComponent,
     HomeComponent
   ],
