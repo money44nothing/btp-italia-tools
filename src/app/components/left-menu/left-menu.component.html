@@ -1,10 +1,3 @@
-<li class="nav-item">
-  <a class="nav-link" [routerLink]="['/foi/list']">
-    Lista Foi
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" [routerLink]="['/ci/list']">
-    Lista CI per BTP
-  </a>
+<li class="nav-item" *ngFor="let item of menuList">
+  <a class="nav-link" [routerLink]="[item.url]">{{ item.label }}</a>
 </li>
