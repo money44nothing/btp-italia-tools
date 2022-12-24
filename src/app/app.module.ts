@@ -11,6 +11,7 @@ import { ListCiComponent } from './components/list-ci/list-ci.component';
 import { FoiExTabacchiComponent } from './components/foi-ex-tabacchi/foi-ex-tabacchi.component';
 import { LeftMenuComponent } from './components/left-menu/left-menu.component';
 import { HomeComponent } from './components/home/home.component';
+import { BtpListComponent } from './components/btp-list/btp-list.component';
 
 registerLocaleData(localeIt);
 
@@ -20,7 +21,8 @@ registerLocaleData(localeIt);
     FoiExTabacchiComponent,
     ListCiComponent,
     LeftMenuComponent,
-    HomeComponent
+    HomeComponent,
+    BtpListComponent
   ],
   imports: [
     BrowserModule,
