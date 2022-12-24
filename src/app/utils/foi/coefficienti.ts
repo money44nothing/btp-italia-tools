@@ -1,13 +1,18 @@
 import { endOfMonth, getDate, getMonth, getYear, isAfter } from 'date-fns';
 import { CoefficienteInflazione, CoefficientiMensiliParam } from './coefficienteInflazioneTypes';
 import { numeroIndiceByDate } from './foi';
+import { FoiExTabacchi } from './foiTypes';
 
-export function coefficienteInflazioneByDate(date: Date, baseDate: Date): number | null {
-  const ni1 = numeroIndiceByDate(date);
+export function coefficienteInflazioneByDate(
+  foiList: FoiExTabacchi[],
+  date: Date,
+  baseDate: Date
+): number | null {
+  const ni1 = numeroIndiceByDate(foiList, date);
   if (ni1 === null) {
     return null;
   }
-  const ni2 = numeroIndiceByDate(baseDate);
+  const ni2 = numeroIndiceByDate(foiList, baseDate);
   if (ni2 === null) {
     return null;
   }
@@ -49,17 +54,21 @@ export function getDataUltimaCedola(date: Date, year: number, month: number): Da
   return new Date(year, cedolaMonth, getDate(date));
 }
 
-export function getCoefficienteMensile(param: Readonly<CoefficientiMensiliParam>): CoefficienteInflazione[] {
+export function getCoefficienteMensile(
+  foiList: readonly FoiExTabacchi[],
+  param: Readonly<CoefficientiMensiliParam>
+): CoefficienteInflazione[] {
   const lastDayOfMonth = endOfMonth(new Date(param.year, param.month, 1));
 
   if (isAfter(param.firstDayOfTrading, lastDayOfMonth)) {
     return [];
   }
 
-  return fillMese(param, getDate(lastDayOfMonth));
+  return fillMese(foiList, param, getDate(lastDayOfMonth));
 }
 
 function fillMese(
+  foiList: readonly FoiExTabacchi[],
   param: Readonly<CoefficientiMensiliParam>,
   endDay: number,
 ): CoefficienteInflazione[] {
@@ -67,7 +76,7 @@ function fillMese(
   const isCedolaMonth = getMesiCedola(param.firstDayOfTrading).includes(param.month);
   const firstDayOfTrading = getDate(param.firstDayOfTrading);
   let baseDate = param.baseDate;
-  let numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
+  let numeroIndiceBaseDate = numeroIndiceByDate(foiList, baseDate);
 
   if (numeroIndiceBaseDate == null) {
     return ciMensili;
@@ -80,9 +89,9 @@ function fillMese(
     }
     if (isCedolaMonth && day === firstDayOfTrading) {
       baseDate = coefficienteDate;
-      numeroIndiceBaseDate = numeroIndiceByDate(baseDate);
+      numeroIndiceBaseDate = numeroIndiceByDate(foiList, baseDate);
     }
-    const numeroIndiceCoefficienteDate = numeroIndiceByDate(coefficienteDate);
+    const numeroIndiceCoefficienteDate = numeroIndiceByDate(foiList, coefficienteDate);
     if (numeroIndiceCoefficienteDate != null && numeroIndiceBaseDate != null) {
       const coefficiente = coefficienteInflazioneByNumeroIndice(numeroIndiceCoefficienteDate, numeroIndiceBaseDate);
       ciMensili.push({ coefficienteDate, coefficiente, baseDate, numeroIndiceBaseDate, numeroIndiceCoefficienteDate });

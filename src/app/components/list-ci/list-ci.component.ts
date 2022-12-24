@@ -2,12 +2,15 @@ import { formatNumber } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { compareAsc, getYear } from 'date-fns';
+import { forkJoin } from 'rxjs';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
 import { ExportFOIService } from '../../services/foi/export-foi.service';
+import { FoiService } from '../../services/foi/foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
 import { CoefficienteInflazione } from '../../utils/foi/coefficienteInflazioneTypes';
 import { getCoefficienteMensile, getDataUltimaCedola } from '../../utils/foi/coefficienti';
+import { FoiExTabacchi } from '../../utils/foi/foiTypes';
 import { emptyListSelection } from '../../utils/selection/selection';
 
 @Component({
@@ -23,19 +26,23 @@ export class ListCiComponent implements OnInit {
   indexBaseDateChange = -1;
   baseDate?: Date;
   permalinkPath = '';
+  foiList: readonly FoiExTabacchi[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private btpItaliaService: BtpItaliaService,
+    private foiService: FoiService,
     private exportService: ExportFOIService,
   ) {}
 
   ngOnInit(): void {
     this.permalinkPath = location.pathname;
 
-    this.btpItaliaService.list()
-      .subscribe(list => {
-        this.btp.list = list;
+    forkJoin([this.foiService.listFoi(), this.btpItaliaService.list()])
+      .subscribe(v => {
+        const [foiList, btpItaliaList] = v;
+        this.foiList = foiList;
+        this.btp.list = btpItaliaList;
         this.year.list = this.yearsFromDataInizioNegoziazione();
         const params = this.activatedRoute.snapshot.queryParamMap;
         this.setup(params.get('isin'), Number(params.get('year')), Number(params.get('month')));
@@ -61,6 +68,7 @@ export class ListCiComponent implements OnInit {
     if (this.btp.selected != null && this.month.selected != null && this.year.selected != null) {
       this.baseDate = getDataUltimaCedola(this.btp.selected.dataInizioNegoziazione, this.year.selected, this.month.selected);
       this.ciList = getCoefficienteMensile(
+        this.foiList,
         {
           baseDate: this.baseDate,
           firstDayOfTrading: this.btp.selected.dataInizioNegoziazione,

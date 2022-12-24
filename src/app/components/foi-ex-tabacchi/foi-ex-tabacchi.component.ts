@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExportFOIService } from '../../services/foi/export-foi.service';
+import { FoiService } from '../../services/foi/foi.service';
 import { MONTH_NAMES } from '../../utils/dates';
-import { FOI_EX_TABACCHI } from '../../utils/foi/foi';
 import { FoiExTabacchi } from '../../utils/foi/foiTypes';
 
 type FoiDesc = FoiExTabacchi & { monthName: string };
@@ -12,14 +12,13 @@ type FoiDesc = FoiExTabacchi & { monthName: string };
   templateUrl: './foi-ex-tabacchi.component.html',
   styleUrls: ['./foi-ex-tabacchi.component.scss']
 })
-export class FoiExTabacchiComponent {
-  foi: FoiDesc[] = FOI_EX_TABACCHI.map(foi => ({
-    ...foi,
-    monthName: MONTH_NAMES[foi.month - 1],
-  }));
+export class FoiExTabacchiComponent implements OnInit {
+  private foi: FoiDesc[] = [];
 
-  foiList: FoiDesc[] = [];
-  years = new Set(FOI_EX_TABACCHI.map(foi => foi.year));
+  foiFiltered: FoiDesc[] = [];
+  years = new Set<number>();
+  permalinkPath = '';
+
   private mCurrentYear = 0;
 
   get currentYear(): number {
@@ -28,18 +27,26 @@ export class FoiExTabacchiComponent {
 
   set currentYear(v: number) {
     this.mCurrentYear = v;
-    this.foiList = this.foi.filter(foi => foi.year === this.mCurrentYear);
+    this.foiFiltered = this.foi.filter(foi => foi.year === this.mCurrentYear);
   }
-
-  permalinkPath = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private foiService: FoiService,
     private exportService: ExportFOIService
   ) {
     this.permalinkPath = location.pathname;
-    const year = Number(activatedRoute.snapshot.queryParamMap.get('year'));
-    this.currentYear = this.years.has(year) ? year : new Date().getFullYear();
+  }
+
+  ngOnInit(): void {
+    this.foiService.listFoi().subscribe(foiList => {
+      this.foi = foiList.map(foi => ({
+        ...foi,
+        monthName: MONTH_NAMES[foi.month - 1], }));
+      this.years = new Set(foiList.map(foi => foi.year));
+      const year = Number(this.activatedRoute.snapshot.queryParamMap.get('year'));
+      this.currentYear = this.years.has(year) ? year : new Date().getFullYear();
+    });
   }
 
   isCurrentYear(y: number): boolean {
@@ -48,7 +55,7 @@ export class FoiExTabacchiComponent {
 
   export(): void {
     this.exportService.exportFoi({
-      list: this.foiList,
+      list: this.foiFiltered,
       fileName: `FOI-Ex-T-${this.currentYear}`,
       sheetTitle: `FOI Ex Tabacchi ${this.currentYear}`
     });
