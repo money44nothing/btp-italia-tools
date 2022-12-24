@@ -1,0 +1,33 @@
+<div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">BTP Italia Quotati</h1>
+</div>
+
+<div class="row g-3 align-items-center">
+  <div class="col-auto">
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">ISIN</th>
+        <th scope="col">Titolo</th>
+        <th scope="col">Data Inizio Negoziazione</th>
+        <th scope="col">Scadenza</th>
+        <th scope="col">Tasso</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let btp of btpItaliaList">
+        <th scope="row">
+          <a target="_blank"
+             href="https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/{{btp.isin}}.html?lang=it">{{ btp.isin }}</a>
+        </th>
+        <td>{{ btp.nome }}</td>
+        <td>{{ btp.dataInizioNegoziazione | date:'dd/MM/yyyy' }}</td>
+        <td>{{ btp.dataScadenza | date:'dd/MM/yyyy' }}</td>
+        <td>{{ btp.cedolaAnnualizzata | number }}%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
