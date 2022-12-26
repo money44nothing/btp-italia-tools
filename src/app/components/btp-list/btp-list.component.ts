@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
 import { BtpItalia } from '../../services/btp-italia/BtpItalia';
-import { ExportFOIService } from '../../services/foi/export-foi.service';
-import { FoiService } from '../../services/foi/foi.service';
 
 @Component({
   selector: 'app-btp-list',
