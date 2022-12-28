@@ -31,4 +31,8 @@ export class BtpItaliaService {
     const [day, month, year] = itaStrDate.split('/');
     return new Date(+year, +month - 1, +day);
   }
+
+  findByIsin(list: BtpItalia[], isin: string): BtpItalia | undefined {
+    return list.find(b => b.isin === isin || b.isinCUM === isin);
+  }
 }

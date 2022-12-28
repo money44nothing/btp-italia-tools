@@ -4,7 +4,7 @@ import { numeroIndiceByDate } from './foi';
 import { FoiExTabacchi } from './foiTypes';
 
 export function coefficienteInflazioneByDate(
-  foiList: FoiExTabacchi[],
+  foiList: readonly FoiExTabacchi[],
   date: Date,
   baseDate: Date
 ): number | null {

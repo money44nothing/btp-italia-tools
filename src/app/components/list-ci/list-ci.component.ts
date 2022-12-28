@@ -91,7 +91,7 @@ export class ListCiComponent implements OnInit {
   }
 
   private setup(isin: string | null, year: number, month: number): void {
-    const selBtp = this.btp.list.find(v => v.isin === isin || v.isinCUM === isin);
+    const selBtp = isin == null ? null : this.btpItaliaService.findByIsin(this.btp.list, isin);
     const selYear = this.year.list.find(v => v === year);
     const selMonth = 1 <= month && month <= 12 ? month : undefined;
 
