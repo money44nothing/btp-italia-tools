@@ -25,7 +25,7 @@
         <td>{{ btp.nome }}</td>
         <td>{{ btp.dataInizioNegoziazione | date:'dd/MM/yyyy' }}</td>
         <td>{{ btp.dataScadenza | date:'dd/MM/yyyy' }}</td>
-        <td>{{ btp.cedolaAnnualizzata | number }}%</td>
+        <td>{{ btp.cedolaAnnualizzata | number:'0.2' }}%</td>
       </tr>
       </tbody>
     </table>
