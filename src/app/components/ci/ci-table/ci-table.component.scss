@@ -1,3 +1,7 @@
 tbody .base-changed:after {
   content: " (*)";
 }
+
+.legend-1:before {
+  content: "(*) ";
+}

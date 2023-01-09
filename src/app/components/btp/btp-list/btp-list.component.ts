@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BtpItaliaService } from '../../services/btp-italia/btp-italia.service';
-import { BtpItalia } from '../../services/btp-italia/BtpItalia';
+import { BtpItaliaService } from '../../../services/btp-italia/btp-italia.service';
+import { BtpItalia } from '../../../services/btp-italia/BtpItalia';
 
 @Component({
   selector: 'app-btp-list',

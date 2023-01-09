@@ -1,0 +1,35 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col" class="align-middle">Data</th>
+    <th scope="col" class="align-middle" *ngIf="indexBaseDateChange < 0; else show_different_bases">Base
+      Data<br/>{{ coefficienti | ciBaseDate:'0':'b1' }}</th>
+    <th scope="col" class="align-middle">Numero Indice</th>
+    <th scope="col" class="align-middle">Numero Indice<br/>Base Data</th>
+
+    <ng-template #show_different_bases>
+      <th scope="col" class="align-middle">Base
+        Data<br/>{{ coefficienti | ciBaseDate:'dc':'b1' }}</th>
+      <th scope="col" class="align-middle">Base
+        Data<br/>{{ coefficienti | ciBaseDate:'dc':'b2' }}</th>
+    </ng-template>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let ci of coefficienti?.days ?? []; let i = index">
+    <th scope="row">{{ ci.coefficienteDate | date:'dd/MM/yyyy' }}</th>
+
+    <td>
+      <span [ngClass]="baseDateClass(i)">{{ ci.base1?.coefficiente | number:'0.5' }}</span>
+    </td>
+    <td *ngIf="indexBaseDateChange >= 0">{{ ci.base2?.coefficiente | number:'0.5' }}</td>
+    <td>{{ ci.numeroIndiceCoefficienteDate | number:'0.5' }}</td>
+    <td>{{ (ci.base1?.numeroIndice ?? ci.base2?.numeroIndice) | number:'0.5' }}</td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <td colspan="5" class="text-danger" [ngStyle]="baseDateNoteStyle()">
+    <div class="legend-1">Per il pagamento della cedola semestrale e della rivalutazione del capitale su base semestrale</div>
+  </td>
+  </tfoot>
+</table>

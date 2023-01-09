@@ -1,0 +1,25 @@
+<ngb-accordion activeIds="" *ngIf="btp">
+  <ngb-panel title="Info">
+    <ng-template ngbPanelContent>
+      <p class="mb-1">
+        <a target="_blank"
+           href="https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/{{btp.isin}}.html?lang=it">Scheda
+          Borsa Italiana</a>
+      </p>
+      <p class="mb-1">
+        <a
+            *ngIf="month && year"
+            target="_blank"
+            [routerLink]="[permalinkPath]"
+            [queryParams]="{isin: btp.isin, year: year, month: month + 1}">Permanent link</a>
+      </p>
+      <p class="text-success">{{ btp.dataInizioNegoziazione | date: 'dd/MM/yyyy' }}
+        - {{ btp.dataScadenza | date: 'dd/MM/yyyy' }} (tasso cedolare reale annuo
+        {{ btp.cedolaAnnualizzata }}%)<br/>
+        <ng-container *ngIf="baseDate">
+          Base {{ baseDate | date: 'dd/MM/yyyy' }}
+        </ng-container>
+      </p>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
