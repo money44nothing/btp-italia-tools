@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref" : "/btp-italia-tools/",
             "outputPath": "dist/btp-italia-tools",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -57,6 +58,30 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "apache": {
+              "assets" : [
+                {
+                  "glob": ".htaccess",
+                  "input": "src/apache/",
+                  "output": "/"
+                }
+              ],
+              "baseHref" : "/btp-italia-tools/",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "8mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputPath": "dist/apache/btp-italia-tools",
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
