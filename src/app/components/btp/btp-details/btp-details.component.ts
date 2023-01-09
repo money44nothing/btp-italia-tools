@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BtpItalia } from '../../../services/btp-italia/BtpItalia';
 
 @Component({
@@ -21,7 +22,12 @@ export class BtpDetailsComponent implements OnInit {
   @Input()
   baseDate?: Date;
 
+  constructor(
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.permalinkPath = '/' + (this.activatedRoute.routeConfig?.path ?? '');
+  }
+
   ngOnInit(): void {
-    this.permalinkPath = location.pathname;
   }
 }

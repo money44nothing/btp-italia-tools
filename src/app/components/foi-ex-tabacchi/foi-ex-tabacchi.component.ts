@@ -35,7 +35,7 @@ export class FoiExTabacchiComponent implements OnInit {
     private foiService: FoiService,
     private exportService: ExportFOIService
   ) {
-    this.permalinkPath = location.pathname;
+    this.permalinkPath = '/' + (this.activatedRoute.routeConfig?.path ?? '');
   }
 
   ngOnInit(): void {
