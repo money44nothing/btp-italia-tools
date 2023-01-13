@@ -8,7 +8,7 @@
       </p>
       <p class="mb-1">
         <a
-            *ngIf="month && year"
+            *ngIf="month != null && year != null"
             target="_blank"
             [routerLink]="[permalinkPath]"
             [queryParams]="{isin: btp.isin, year: year, month: month + 1}">Permanent link</a>
