@@ -91,14 +91,13 @@ export class CiListComponent implements OnInit {
   }
 
   private setup(isin: string | null, year: number, month: number): void {
+    const now = new Date();
     const selBtp = isin == null ? null : this.btpItaliaService.findByIsin(this.btp.list, isin);
-    const selYear = this.year.list.find(v => v === year);
-    const selMonth = 1 <= month && month <= 12 ? month : undefined;
+    this.year.selected = this.year.list.find(v => v === year) ?? now.getFullYear();
+    this.month.selected = 1 <= month && month <= 12 ? month - 1 : now.getMonth();
 
-    if (selBtp != null && selYear != null && selMonth != null) {
+    if (selBtp != null) {
       this.btp.selected = selBtp;
-      this.year.selected = selYear;
-      this.month.selected = selMonth - 1;
       this.showCIList();
     }
   }
