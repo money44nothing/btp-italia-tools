@@ -147,7 +147,7 @@ const FOI_EX_TABACCHI: readonly FoiExTabacchi[] = [
   { year: 2022, month: 10, value: 117.2 },
   { year: 2022, month: 11, value: 117.9 },
   { year: 2022, month: 12, value: 118.1 },
-  { year: 2023, month: 1, value: 118.2 },
+  { year: 2023, month: 1, value: 118.3 },
 ] as const;
 
 @Injectable({
