@@ -7,7 +7,7 @@ interface MenuItem {
 
 const MENU_LIST: MenuItem[] = [
   { label: 'Lista Foi', url: '/foi/list' },
-  { label: 'Lista CI per BTP', url: '/ci/list' },
+  // { label: 'Lista CI per BTP', url: '/ci/list' },
   { label: 'BTP Quotati', url: '/btp/list' },
 ];
 
