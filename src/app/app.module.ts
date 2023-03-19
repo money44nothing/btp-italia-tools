@@ -1,4 +1,5 @@
 import { JsonPipe, registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +16,7 @@ import { BtpListComponent } from './components/btp/btp-list/btp-list.component';
 import { BtpDetailsComponent } from './components/btp/btp-details/btp-details.component';
 import { CiTableComponent } from './components/ci/ci-table/ci-table.component';
 import { CIBaseDatePipe } from './pipes/ci/cibase-date.pipe';
+import { httpInterceptorProviders } from './services/http-interceptors';
 
 registerLocaleData(localeIt);
 
@@ -33,10 +35,12 @@ registerLocaleData(localeIt);
   imports: [
     BrowserModule,
     NgbModule,
+    HttpClientModule,
     NgbTypeaheadModule, FormsModule, JsonPipe, AppRoutingModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'it-IT' },
+    httpInterceptorProviders,
   ],
   bootstrap: [AppComponent]
 })
